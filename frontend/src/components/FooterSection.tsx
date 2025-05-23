@@ -22,7 +22,7 @@ export default function FooterSection() {
             </a>
           </div>
           <p className="text-[#5c748a] text-base font-normal leading-normal">
-            @2024 Interview AI. All rights reserved.
+            @2025 Interview AI. All rights reserved.
           </p>
         </footer>
       </div>

@@ -21,7 +21,7 @@ export default function HeroSection() {
             practice scenarios.
           </h2>
         </div>
-        <Button className="flex min-w-[84px] max-w-[480px] rounded-full h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#dce8f3] text-[#101518] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]">
+        <Button className="flex min-w-[84px] max-w-[480px] rounded-full h-10 px-4 ">
           Get Started
         </Button>
       </div>
