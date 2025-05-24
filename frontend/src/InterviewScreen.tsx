@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { io, Socket } from 'socket.io-client'
 import { Microphone } from './components/svg/Microphone'
 
 // Define the SpeechRecognition interface
@@ -52,9 +53,49 @@ export const InterviewScreen = () => {
   const [interviewerQuestion, setInterviewerQuestion] = useState(
     'What are your strengths?'
   )
+  const [isConnected, setIsConnected] = useState(false)
+  const socketRef = useRef<Socket | null>(null)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const recognitionRef = useRef<SpeechRecognition | null>(null)
   const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null)
+
+  // Initialize Socket.IO connection
+  useEffect(() => {
+    // Connect to your backend server
+    socketRef.current = io('http://localhost:3000', {
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    })
+
+    // Connection events
+    socketRef.current.on('connect', () => {
+      console.log('Connected to server')
+      setIsConnected(true)
+
+      // Join interview room - you might want to get this from URL params or props
+      socketRef.current?.emit('join_interview', {
+        interviewId: 'interview-123',
+      })
+    })
+
+    socketRef.current.on('disconnect', () => {
+      console.log('Disconnected from server')
+      setIsConnected(false)
+    })
+
+    // Listen for new questions from the interviewer
+    socketRef.current.on('new_question', (data) => {
+      console.log('Received new question:', data)
+      setInterviewerQuestion(data.question)
+      // The TTS effect will automatically trigger because of the dependency
+    })
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect()
+      }
+    }
+  }, [])
 
   useEffect(() => {
     // Check if browser supports speech recognition
@@ -191,16 +232,32 @@ export const InterviewScreen = () => {
       stopRecording()
     }
 
-    // Save transcript somewhere if needed
-    console.log('Submitted transcript:', transcript)
+    // Send transcript to server via socket
+    if (socketRef.current && transcript) {
+      socketRef.current.emit('submit_answer', {
+        answer: transcript,
+        questionId: interviewerQuestion, // You might want to track question IDs
+      })
 
-    // Clear the transcript
+      console.log('Submitted answer via socket:', transcript)
+    }
+
+    // Clear the transcript for next question
     setTranscript('')
   }
 
   return (
     <div className="px-40 flex flex-1 justify-center py-5">
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+        <div className="absolute top-20 right-4">
+          <span
+            className={`inline-block w-2 h-2 rounded-full mr-2 ${
+              isConnected ? 'bg-green-500' : 'bg-red-500'
+            }`}></span>
+          <span className="text-sm text-gray-600">
+            {isConnected ? 'Connected' : 'Disconnected'}
+          </span>
+        </div>
         <div className="flex p-4 @container">
           <div className="flex w-full flex-col gap-4 items-center">
             <div className="flex gap-4 flex-col items-center">
