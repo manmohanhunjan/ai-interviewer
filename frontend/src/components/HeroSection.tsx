@@ -1,5 +1,6 @@
 // HeroSection.tsx
 import { Button } from './ui/button'
+import { Link } from 'react-router'
 
 export default function HeroSection() {
   return (
@@ -21,8 +22,12 @@ export default function HeroSection() {
             practice scenarios.
           </h2>
         </div>
-        <Button className="flex min-w-[84px] max-w-[480px] rounded-full h-10 px-4 ">
-          Get Started
+        <Button className="flex min-w-[84px] max-w-[480px] rounded-full h-12 px-4 ">
+          <Link
+            to="/link-generator"
+            className="flex items-center justify-center w-full h-full">
+            <span className="truncate text-lg">Get Started</span>
+          </Link>
         </Button>
       </div>
     </section>

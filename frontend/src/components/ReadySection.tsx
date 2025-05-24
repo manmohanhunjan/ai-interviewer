@@ -1,4 +1,5 @@
 // ReadySection.tsx
+import { Link } from 'react-router'
 import { Button } from './ui/button'
 
 export default function ReadySection() {
@@ -17,7 +18,11 @@ export default function ReadySection() {
         <div className="flex flex-1 justify-center">
           <div className="flex justify-center">
             <Button className="flex min-w-[84px] max-w-[480px] rounded-full h-10 px-4">
-              Get Started
+              <Link
+                to="/link-generator"
+                className="flex items-center justify-center w-full h-full">
+                <span className="truncate text-lg">Get Started</span>
+              </Link>
             </Button>
           </div>
         </div>

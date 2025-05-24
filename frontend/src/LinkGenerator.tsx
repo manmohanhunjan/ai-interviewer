@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { Button } from './components/ui/button'
 import { Input } from './components/ui/input'
 
@@ -27,7 +28,9 @@ export const LinkGenerator = () => {
         </div>
         <div className="flex px-4 py-3 justify-center">
           <Button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4">
-            <span className="truncate">Generate Link</span>
+            <Link to="/interview">
+              <span className="truncate">Generate Link</span>
+            </Link>
           </Button>
         </div>
       </div>
